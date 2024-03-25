@@ -1,3 +1,6 @@
+package saucedemo;
+
+import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -7,11 +10,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-
 import java.time.Duration;
 import java.util.Objects;
 
-public class MyStepdefs {
+public class StepDefinitions {
     private WebDriver driver;
 
     @Given("I am on the login page")
@@ -22,7 +24,7 @@ public class MyStepdefs {
         driver.get("https://www.saucedemo.com/");
     }
 
-    @Given("I enter username {string} and password {string}")
+    @When("I enter username {string} and password {string}")
     public void iEnterUsernameAndPassword(String username, String password) {
         WebElement name = driver.findElement(By.xpath("//input[@id='user-name']"));
         name.click();
@@ -45,7 +47,7 @@ public class MyStepdefs {
         Assert.assertEquals(currentUrl, "https://www.saucedemo.com/inventory.html");
     }
 
-    @When("I add two products by my choice")
+    @When("I add two products of my choice")
     public void iAddedTwoProducts() {
         WebElement product1 = driver.findElement(By.xpath("//button[@data-test='add-to-cart-sauce-labs-fleece-jacket']"));
         WebElement product2 = driver.findElement(By.xpath("//button[@data-test='add-to-cart-sauce-labs-bike-light']"));
@@ -78,7 +80,7 @@ public class MyStepdefs {
         Assert.assertNotNull(linkWithoutSpan);
     }
 
-    @When("I add two products by my choice to the card")
+    @When("I add two products of my choice to the card")
     public void iAddTwoProductsByMyChoiceToTheCard() {
         WebElement finalPr1 = driver.findElement(By.cssSelector("#add-to-cart-sauce-labs-fleece-jacket"));
         finalPr1.click();
@@ -100,7 +102,7 @@ public class MyStepdefs {
         Assert.assertEquals(currentUrl, "https://www.saucedemo.com/cart.html");
     }
 
-    @Then("I verify the products I have selected in step ?? are displayed properly on the screen")
+    @Then("I verify the products I have selected are displayed properly on the screen")
     public void iGoToCardAndICheckIfMyFinalProductsAreAdded() {
         WebElement product1 = driver.findElement(By.cssSelector("a[id='item_5_title_link'] div[class='inventory_item_name']"));
         Assert.assertEquals(product1.getText(), "Sauce Labs Fleece Jacket");
@@ -146,7 +148,7 @@ public class MyStepdefs {
         Assert.assertEquals(errorPostalCode, "Error: Postal Code is required");
     }
 
-    @Then("I clear the form, fill it in and click continue")
+    @And("I clear the form, fill it in and click continue")
     public void iClearTheFormFillItInAndClickContinue() {
         WebElement firstNameField = driver.findElement(By.cssSelector("#first-name"));
         WebElement lastNameField = driver.findElement(By.cssSelector("#last-name"));
@@ -179,7 +181,6 @@ public class MyStepdefs {
         WebElement itemName2 = driver.findElement(By.cssSelector("a[id='item_2_title_link'] div[class='inventory_item_name']"));
         String itemName2Text = itemName2.getText();
         Assert.assertEquals(itemName2Text, "Sauce Labs Onesie");
-
         //buttons
         WebElement cancelButton = driver.findElement(By.cssSelector("#cancel"));
         Assert.assertTrue(cancelButton.isDisplayed());
@@ -187,7 +188,7 @@ public class MyStepdefs {
         Assert.assertTrue(finishButton.isDisplayed());
     }
 
-    @Then("I click continue and verify success message for successful purchase")
+    @And("I click continue and verify success message for successful purchase")
     public void iClickContinueAndVerifySuccessMessageForSuccessfulPurchase() {
         WebElement finishButton = driver.findElement(By.cssSelector("#finish"));
         finishButton.click();
@@ -202,9 +203,11 @@ public class MyStepdefs {
         burgerMenuButton.click();
         WebElement logoutSidebarLinkButton =driver.findElement(By.cssSelector("#logout_sidebar_link"));
         logoutSidebarLinkButton.click();
-
     }
-
-
+    @After
+    public void teardown() {
+        if(driver!=null) {
+            driver.quit();
+        }
+    }
 }
-
